@@ -1,37 +1,36 @@
 package com.fabiano.stockquotemanager.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StockDto {
 
 	String id;
-	List<StockQuoteDto> quotes = new ArrayList<StockQuoteDto>();
+	Map<LocalDate, String> quotes = new HashMap<>();
+	
+	public StockDto(String id, Map<LocalDate, String> quotes) {
+		super();
+		this.id = id;
+		this.quotes = quotes;
+	}
 	
 	public StockDto() {
 		super();
 	}
 	
-	public StockDto(String id, List<StockQuoteDto> quotes) {
-		super();
-		this.id = id;
-		this.quotes = quotes;
-	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	public List<StockQuoteDto> getQuotes() {
+	public Map<LocalDate, String> getQuotes() {
 		return quotes;
 	}
-
-	public void setQuotes(List<StockQuoteDto> quotes) {
+	public void setQuotes(Map<LocalDate, String> quotes) {
 		this.quotes = quotes;
 	}
+
 
 }

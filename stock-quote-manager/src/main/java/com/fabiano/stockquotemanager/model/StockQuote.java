@@ -36,7 +36,6 @@ public class StockQuote {
 	
 	LocalDate date;
 	
-	@Digits(integer=5, fraction=2)
 	BigDecimal price;
 
 	public StockQuote() {

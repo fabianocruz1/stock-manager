@@ -4,11 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fabiano.stockquotemanager.dto.StockDto;
 import com.fabiano.stockquotemanager.model.Stock;
 import com.fabiano.stockquotemanager.model.StockQuote;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class teste {
 
@@ -20,7 +24,17 @@ public class teste {
 	private static final String QUOTES_TOKEN = "quotes";
 	private static final String INVALID_INPUT = "Invalid input";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JsonProcessingException {
+
+		ObjectMapper om = new ObjectMapper();
+		HashMap<LocalDate, String> quotes1 = new HashMap<>();
+		quotes1.put(LocalDate.of(2000, 01, 01), "1");
+		quotes1.put(LocalDate.of(2000, 01, 22), "2");
+		StockDto dto = new StockDto("abc", quotes1);
+		
+		String string = om.writeValueAsString(dto);
+		System.out.println(string);
+		
 		// TODO Auto-generated method stub
 
 		String info = "{\r\n" + 

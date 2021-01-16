@@ -1,7 +1,6 @@
 package com.fabiano.stockquotemanager.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,40 +11,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fabiano.stockquotemanager.dto.StockDto;
-import com.fabiano.stockquotemanager.service.StockService;
-import com.fabiano.stockquotemanager.util.Contants;
-import com.fabiano.stockquotemanager.util.StockConverter;
+import com.fabiano.stockquotemanager.interfaces.StockController;
+import com.fabiano.stockquotemanager.interfaces.StockQuoteService;
+import com.fabiano.stockquotemanager.service.StockQuoteServiceImpl;
 
 @RestController
-public class Controller {
+public class Controller implements StockController {
  
 	@Autowired
-	private final StockService service;
+	private final StockQuoteService service;
  
-    public Controller(StockService service) {
+    public Controller(StockQuoteServiceImpl service) {
         this.service = service;
     }
  
     @GetMapping("/stock")
-    public String readAllStockQuotes() {
+	@Override
+	public List<StockDto> readStockQuotes() {
     	List<StockDto> stockDtos = service.findAll();
-		return stockDtos.stream().map(dto -> StockConverter.toString(dto)).collect(Collectors.joining(Contants.LIST_SEPARATOR+Contants.NEW_LINE));
+		return stockDtos;
     }
  
     @GetMapping(value = "/stock/{id}")
-    public String readStockQuotesById(@PathVariable String id) {
-    	return StockConverter.toString(service.findByName(id));
+	@Override
+	public StockDto readStockQuotesByStockId(@PathVariable String id) {
+    	return service.findByName(id);
     }
  
     @PostMapping("/stock")
-    public String createQuote(@RequestBody String info) {
-    	StockDto dto = StockConverter.fromString(info);
+	@Override
+    public StockDto createStockQuote(@RequestBody StockDto dto) {
     	StockDto save = service.save(dto);
-        return StockConverter.toString(save);
+        return save;
     }
  
     @DeleteMapping(value = "/stockcache")
     public void deleteCache() {
         service.deleteCache();
     }
+
 }
