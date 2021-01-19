@@ -1,0 +1,83 @@
+Docker - creating and publishing a SpringBoot app 
+
+1- Create a DockerFile in project root:
+.
+├── Dockerfile
+├── README.md
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── hello
+    │   │       ├── Application.java
+    │   │       └── GreetingController.java
+    │   └── resources
+    │       ├── static
+    │       │   └── index.html
+    │       └── templates
+    │           └── greeting.html
+    └── test
+        └── java
+            └── hello
+                └── ApplicationTest.java
+				
+1.1-Dockerfile contents				
+# Pull base image.
+FROM ubuntu:latest
+
+RUN \
+# Update
+apt-get update -y && \
+# Install Java
+apt-get install default-jre -y
+
+ADD ./target/gs-serving-web-content-0.1.0.jar spring-mvc-example.jar
+
+EXPOSE 8080
+
+CMD java -jar spring-mvc-example.jar
+
+
+2-Build the Docker image 
+2.1- Build the project 
+mvn clean install
+
+2.2-To build the image with the name spring-mvc-sample-image :
+docker build . -t spring-mvc-sample-image
+
+2.3-You can verify the image built correctly with docker images :
+$ docker images
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+spring-mvc-sample-image   latest              8fa27ad00edd        34 minutes ago      540MB
+
+2.4-Create a container called sample-mvc-sample-container based on your image spring-mvc-sample-image .
+docker run -t -p 8080:8080 --name sample-mvc-sample-container spring-mvc-sample-image
+
+PS: 
+ docker ps -a shows dockers 
+ add -d to your docker run command to run the container in the background, 
+  to see the logs use: docker logs <container_id>  
+ with -t you’ll find yourself in the container (and seeing the Spring application logs)
+ to go back inside the container running your java application, command: docker exec -it <container-id> /bin/bash
+ 
+2.5-tag and push the Image to the public Dockerhub
+$ docker images
+REPOSITORY TAG IMAGE ID CREATED SIZE
+spring-mvc-sample-image latest 8fa27ad00edd 34 minutes ago 540MB
+
+template: docker tag <image_id> <login>/<name>:<version>
+
+TAG cmd: 
+	docker tag 8fa27ad00edd gsweene2/spring-mvc-sample-image:0.1
+
+PUSH cmd: 
+	docker push gsweene2/spring-mvc-sample-image:0.1
+
+2.6-Find your image in DockerHub
+You should be able to find it at cloud.docker.com after you log in, but the URL pattern appears to be:
+https://cloud.docker.com/repository/docker/<username>/<image_name>
+
+3-RUN mysql on docker
+docker container run -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=bootdb -p 3306:3306 -p 33060:33060 -d mysql:8

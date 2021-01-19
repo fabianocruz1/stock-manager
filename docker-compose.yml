@@ -1,9 +1,14 @@
 version: '3'
 
+
+networks:
+  
+  backend:
+  
 services:
 
-  mysql:
-    image: mysql:8.0
+  db:
+    image: mysql:8
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=bootdb
@@ -12,31 +17,37 @@ services:
     ports:
       - 3306:3306
       - 33060:33060
+    networks:
+      - backend
 
-  stock-manager:
-    image: lucasvilela/stock-manager
-    restart: on-failure
-    depends_on:
-      - mysql
-    ports:
-      - 8080:8080
-    environment:
-      - DATABASE_HOST=mysql
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=root
-      - DATABASE_NAME=bootdb
-      - DATABASE_PORT=3306
+#  stock-manager:
+#    image: lucasvilela/stock-manager
+#    restart: on-failure
+#    depends_on:
+#      - mysql
+#    ports:
+#      - 8080:8080
+#    environment:
+#      - DATABASE_HOST=mysql
+#      - DATABASE_USER=root
+#      - DATABASE_PASSWORD=root
+#      - DATABASE_NAME=bootdb
+#      - DATABASE_PORT=3306
 
   stock-quote-manager:
-    image: lucasvilela/stock-quote-manager
-    restart: on-failure
+    image: fabianocruz123/stock-quote-image:v1
+    #restart: on-failure
     depends_on:
-      - mysql
+      - db
     ports:
       - 8081:8081
     environment:
-      - DATABASE_HOST=mysql
+      - DATABASE_HOST=db 
       - DATABASE_USER=root
       - DATABASE_PASSWORD=root
       - DATABASE_NAME=bootdb
       - DATABASE_PORT=3306
+    networks:
+      - backend     
+    
+    
