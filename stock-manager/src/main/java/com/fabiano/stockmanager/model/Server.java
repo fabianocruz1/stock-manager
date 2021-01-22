@@ -1,22 +1,8 @@
 package com.fabiano.stockmanager.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Table()
-@Entity
 public class Server {
 
-	@Id 
-	@GeneratedValue
-	Long idServer;
-	
-	@Column(unique=true)
 	String host;
-	
 	Integer port;
 	
 	public Server(String host, Integer port) {
@@ -27,14 +13,6 @@ public class Server {
 
 	public Server() {
 		super();
-	}
-
-	public Long getIdServer() {
-		return idServer;
-	}
-
-	public void setIdServer(Long idServer) {
-		this.idServer = idServer;
 	}
 
 	public String getHost() {

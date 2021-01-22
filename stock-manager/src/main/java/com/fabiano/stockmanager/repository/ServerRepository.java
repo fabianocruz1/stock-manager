@@ -1,11 +1,15 @@
 package com.fabiano.stockmanager.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.Collection;
 
 import com.fabiano.stockmanager.model.Server;
 
-public interface ServerRepository extends CrudRepository<Server, Long> {
+public interface ServerRepository {
 
 	Server findByHost(String host);
+
+	Server save(Server server);
+
+	Collection<Server> findAll();
 
 }
